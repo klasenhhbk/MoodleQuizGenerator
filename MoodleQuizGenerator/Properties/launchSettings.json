@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MoodleQuizGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "QuizAufgabenBS"
+    }
+  }
+}
