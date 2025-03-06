@@ -99,23 +99,23 @@
 
                                                                 );
 
-                                    if (subs[3] == "R")
+                                    if (subs[3].ToUpper() == "R")
                                         treffer.Fraction1 = fractionR;
                                     else
                                         treffer.Fraction1 = fractionF;
-                                    if (subs[5] == "R")
+                                    if (subs[5].ToUpper() == "R")
                                         treffer.Fraction2 = fractionR;
                                     else
                                         treffer.Fraction2 = fractionF;
-                                    if (subs[7] == "R")
+                                    if (subs[7].ToUpper() == "R")
                                         treffer.Fraction3 = fractionR;
                                     else
                                         treffer.Fraction3 = fractionF;
-                                    if (subs[9] == "R")
+                                    if (subs[9].ToUpper() == "R")
                                         treffer.Fraction4 = fractionR;
                                     else
                                         treffer.Fraction4 = fractionF;
-                                    if (subs[11] == "R")
+                                    if (subs[11].ToUpper() == "R")
                                         treffer.Fraction5 = fractionR;
                                     else
                                         treffer.Fraction5 = fractionF;
