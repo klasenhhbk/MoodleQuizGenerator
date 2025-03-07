@@ -39,7 +39,7 @@ namespace MoodleQuizGenerator
                 new XElement("generalfeedback",
                     new XAttribute("format", "html"),
                 new XElement("text")),
-            new XElement("defaultegrade", "5.0000000"),
+            new XElement("defaultegrade", "1.0000000"),
             new XElement("penalty","0.0000000"),
             new XElement("hidden","0"),
             new XElement("idnumber"),
@@ -56,57 +56,22 @@ namespace MoodleQuizGenerator
             new XElement("incorrectfeedback",
                 new XAttribute("format","html"),
                 new XElement("text","Die Antwort ist falsch.")),
-            new XElement("shownumcorrect"),
-            
-            new XElement("answer",
-                new XAttribute("fraction",quizfrage.Fraction1),
-                new XAttribute("format","html"),
-                new XElement("text",
-                    new XCData("<p dir=\"ltr\" style=\"text-align: left;\">" +
-                        quizfrage.Antwort1+"</p>")),
-                new XElement("feedback",
-                    new XAttribute("format","html"),
-                    new XElement("text"))),
-            
-            new XElement("answer",
-                new XAttribute("fraction",quizfrage.Fraction2),
-                new XAttribute("format", "html"),
-                new XElement("text", 
-                    new XCData("<p dir=\"ltr\" style=\"text-align: left;\">" +
-                        quizfrage.Antwort2+"</p>")),
-                new XElement("feedback",
-                    new XAttribute("format", "html"),
-                    new XElement("text"))),
-
-            new XElement("answer",
-                new XAttribute("fraction",quizfrage.Fraction3),
-                new XAttribute("format", "html"),
-                new XElement("text", 
-                    new XCData("<p dir=\"ltr\" style=\"text-align: left;\">" +
-                        quizfrage.Antwort3+"</p>")),
-                new XElement("feedback",
-                    new XAttribute("format", "html"),
-                    new XElement("text"))),
-            new XElement("answer",
-                new XAttribute("fraction",quizfrage.Fraction4),
-                new XAttribute("format", "html"),
-                new XElement("text",
-                    new XCData("<p dir=\"ltr\" style=\"text-align: left;\">" +
-                        quizfrage.Antwort4+"</p>")),
-                new XElement("feedback",
-                    new XAttribute("format", "html"),
-                    new XElement("text"))),
-            new XElement("answer",
-                new XAttribute("fraction",quizfrage.Fraction5),
-                new XAttribute("format", "html"),
-                new XElement("text", 
-                    new XCData("<p dir = \"ltr\" style=\"text-align: left;\">" +
-                        quizfrage.Antwort5+"</p>")),
-                new XElement("feedback",
-                    new XAttribute("format", "html"),
-                    new XElement("text")))
-                   
+            new XElement("shownumcorrect")
                 );
+
+            for(int i = 0; i < quizfrage.AnzahlAntworten; i++)
+            {
+                element.Add(new XElement("answer",
+                    new XAttribute("fraction", quizfrage.Fractions[i]),
+                    new XAttribute("format", "html"),
+                    new XElement("text",
+                        new XCData("<p dir = \"ltr\" style=\"text-align: left;\">" +
+                            quizfrage.Antworten[i] + "</p>")),
+                    new XElement("feedback",
+                        new XAttribute("format", "html"),
+                        new XElement("text"))));
+            }
+
             doc.Element("quiz").Add(com);
             doc.Element("quiz").Add(element);
             doc.Save(path);
@@ -130,12 +95,12 @@ namespace MoodleQuizGenerator
 
             //view.anzeigen(erList);
             List<Quizfrage> ergebnis=new List<Quizfrage>();
-            ergebnis.Add(new Quizfrage("", "", "", "", "", "", "", "", "", "", "", ""));
+            ergebnis.Add(new Quizfrage("", "", new List<string>(), new List<string>()));
             return ergebnis;
 
         }
 
-        List<Quizfrage> IModel.suchen(Quizfrage quizfrage, string praefix)
+        List<Quizfrage> IModel.suchen(Quizfrage quizfrage, string praefix, bool anzahlFragenFix)
         {
             throw new NotImplementedException();
         }
