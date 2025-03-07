@@ -41,7 +41,14 @@
 
                     foreach (string line in list)
                     {
-                        string[] subs = line.Split(';');
+                        // Mit einem Backslash maskierte Semikola bearbeiten
+                        string alteredLine=line.Replace("\\;", "&semicolon&");
+                        string[] subs = alteredLine.Split(';');
+                        for (int i= 0;i < subs.Length;i++)
+                        {
+                            subs[i]=subs[i].Replace("&semicolon&", ";");
+                        }
+                        
                         int number = 0;
                         treffer = new Quizfrage("", "", "", "", "", "", "", "", "", "", "", "");
                         if (subs.Length == 12)
