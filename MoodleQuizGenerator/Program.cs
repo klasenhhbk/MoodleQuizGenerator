@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Xml.Linq;
 
 namespace MoodleQuizGenerator
 {
@@ -47,6 +48,9 @@ namespace MoodleQuizGenerator
 
             // Dateiname der XML-Datei-Ausgabe mit klarem Bezug versehen
             (modelXML as ModelXML).Path = praefix + ".xml";
+
+            // Kategoriename gleichsetzen mit dem Praefix
+            (modelXML as ModelXML).defineInitialXElement(praefix);
 
             foreach (Quizfrage quizfrage in quizfragen)
             {

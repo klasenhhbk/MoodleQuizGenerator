@@ -116,7 +116,8 @@ namespace MoodleQuizGenerator
             //else
             //{
                 string nameKategorie = "HabIchMirAusgedacht";
-                doc = new XDocument(new XElement("quiz",
+                defineInitialXElement(nameKategorie);
+                /*doc = new XDocument(new XElement("quiz",
                     new XComment("question: 0"),
                     new XElement("question",
                         new XAttribute ("type","category"),
@@ -125,8 +126,22 @@ namespace MoodleQuizGenerator
                         new XElement("info",
                             new XAttribute("format","moodle_auto_format"),
                             new XElement("text","Standardkategorie für Fragen, die im Kontext 'Ausdenken' freigegeben sind.")),
-                        new XElement("idnumber"))));
+                        new XElement("idnumber"))));*/
             //}
+        }
+
+        public void defineInitialXElement(string nameKategorie)
+        {
+            doc = new XDocument(new XElement("quiz",
+                new XComment("question: 0"),
+                new XElement("question",
+                    new XAttribute("type", "category"),
+                    new XElement("category",
+                        new XElement("text", "$course$/top/" + nameKategorie)),
+                    new XElement("info",
+                        new XAttribute("format", "moodle_auto_format"),
+                        new XElement("text", "Standardkategorie für Fragen, die im Kontext 'Ausdenken' freigegeben sind.")),
+                    new XElement("idnumber"))));
         }
     }
 }
