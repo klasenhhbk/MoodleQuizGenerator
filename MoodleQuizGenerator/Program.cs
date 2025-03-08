@@ -44,6 +44,20 @@ namespace MoodleQuizGenerator
                 Console.Write("Praefix: ");
                 praefix = Console.ReadLine();
             }
+
+            if (kommandozeilenargumente.IstArgumentVorhanden("-y"))
+            {
+                string penalty = kommandozeilenargumente.HoleArgument("-y");
+                (modelXML as ModelXML).Penalty = penalty;
+            }
+
+            if (kommandozeilenargumente.IstArgumentVorhanden("-g"))
+            {
+                string defaultgrade = kommandozeilenargumente.HoleArgument("-g");
+                (modelXML as ModelXML).Defaultgrade = defaultgrade;
+            }
+
+
             List<Quizfrage> quizfragen = modelCSV.suchen(new Quizfrage("", "", new List<string>(), new List<string>()), praefix, anzahlFragenFix);
 
             // Dateiname der XML-Datei-Ausgabe mit klarem Bezug versehen

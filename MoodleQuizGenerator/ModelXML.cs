@@ -13,9 +13,13 @@ namespace MoodleQuizGenerator
         private IController controller;
         private IView view;
         private string path="dasIsteinTest.xml";
+        private string penalty= "0.0000000";
+        private string defaultgrade = "5.0000000";
         public string Path { get => path; set => path = value; }
         IController IModel.Controller { set => controller = value; }
         IView IModel.View { set => view = value; }
+        public string Penalty { get => penalty; set => penalty = value; }
+        public string Defaultgrade { get => defaultgrade; set => defaultgrade = value; }
 
         void IModel.loeschen(Quizfrage quizfrage)
         {
@@ -24,8 +28,6 @@ namespace MoodleQuizGenerator
 
         void IModel.speichern(Quizfrage quizfrage)
         {
-            
-
             XComment com = new XComment("question: "+quizfrage.Fragennummer);
             XElement element = new XElement("question",
                 new XAttribute("type" , "multichoice"),
@@ -39,8 +41,8 @@ namespace MoodleQuizGenerator
                 new XElement("generalfeedback",
                     new XAttribute("format", "html"),
                 new XElement("text")),
-            new XElement("defaultegrade", "1.0000000"),
-            new XElement("penalty","0.0000000"),
+            new XElement("defaultegrade", Defaultgrade),
+            new XElement("penalty", penalty),
             new XElement("hidden","0"),
             new XElement("idnumber"),
             new XElement("single","false"),
@@ -75,8 +77,6 @@ namespace MoodleQuizGenerator
             doc.Element("quiz").Add(com);
             doc.Element("quiz").Add(element);
             doc.Save(path);
-
-
         }
 
         List<Quizfrage> IModel.suchen(Quizfrage quizfrage)
@@ -117,17 +117,6 @@ namespace MoodleQuizGenerator
             //{
                 string nameKategorie = "HabIchMirAusgedacht";
                 defineInitialXElement(nameKategorie);
-                /*doc = new XDocument(new XElement("quiz",
-                    new XComment("question: 0"),
-                    new XElement("question",
-                        new XAttribute ("type","category"),
-                        new XElement("category",
-                            new XElement("text","$course$/top/"+nameKategorie)),
-                        new XElement("info",
-                            new XAttribute("format","moodle_auto_format"),
-                            new XElement("text","Standardkategorie für Fragen, die im Kontext 'Ausdenken' freigegeben sind.")),
-                        new XElement("idnumber"))));*/
-            //}
         }
 
         public void defineInitialXElement(string nameKategorie)
