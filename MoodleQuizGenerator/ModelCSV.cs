@@ -55,6 +55,14 @@
                         {
                             continue;
                         }
+
+                        if (subs.Length < 6)
+                        {
+                            Console.WriteLine("Mindestanzahl von 6 Eintraegen pro Zeile nicht gegeben in Datei: "
+                                + dateiname + " in Zeile " + Convert.ToString(lineNumber));
+                            continue;
+                        }
+
                         if (subs[0] == "")
                         {
                             Console.WriteLine("Fragennummer fehlt in Datei: " 
