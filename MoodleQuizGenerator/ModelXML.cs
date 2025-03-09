@@ -13,9 +13,13 @@ namespace MoodleQuizGenerator
         private IController controller;
         private IView view;
         private string path="dasIsteinTest.xml";
+        private string penalty= "0.0000000";
+        private string defaultgrade = "5.0000000";
         public string Path { get => path; set => path = value; }
         IController IModel.Controller { set => controller = value; }
         IView IModel.View { set => view = value; }
+        public string Penalty { get => penalty; set => penalty = value; }
+        public string Defaultgrade { get => defaultgrade; set => defaultgrade = value; }
 
         void IModel.loeschen(Quizfrage quizfrage)
         {
@@ -24,8 +28,6 @@ namespace MoodleQuizGenerator
 
         void IModel.speichern(Quizfrage quizfrage)
         {
-            
-
             XComment com = new XComment("question: "+quizfrage.Fragennummer);
             XElement element = new XElement("question",
                 new XAttribute("type" , "multichoice"),
@@ -39,8 +41,8 @@ namespace MoodleQuizGenerator
                 new XElement("generalfeedback",
                     new XAttribute("format", "html"),
                 new XElement("text")),
-            new XElement("defaultegrade", "5.0000000"),
-            new XElement("penalty","0.0000000"),
+            new XElement("defaultegrade", Defaultgrade),
+            new XElement("penalty", penalty),
             new XElement("hidden","0"),
             new XElement("idnumber"),
             new XElement("single","false"),
@@ -56,62 +58,25 @@ namespace MoodleQuizGenerator
             new XElement("incorrectfeedback",
                 new XAttribute("format","html"),
                 new XElement("text","Die Antwort ist falsch.")),
-            new XElement("shownumcorrect"),
-            
-            new XElement("answer",
-                new XAttribute("fraction",quizfrage.Fraction1),
-                new XAttribute("format","html"),
-                new XElement("text",
-                    new XCData("<p dir=\"ltr\" style=\"text-align: left;\">" +
-                        quizfrage.Antwort1+"</p>")),
-                new XElement("feedback",
-                    new XAttribute("format","html"),
-                    new XElement("text"))),
-            
-            new XElement("answer",
-                new XAttribute("fraction",quizfrage.Fraction2),
-                new XAttribute("format", "html"),
-                new XElement("text", 
-                    new XCData("<p dir=\"ltr\" style=\"text-align: left;\">" +
-                        quizfrage.Antwort2+"</p>")),
-                new XElement("feedback",
-                    new XAttribute("format", "html"),
-                    new XElement("text"))),
-
-            new XElement("answer",
-                new XAttribute("fraction",quizfrage.Fraction3),
-                new XAttribute("format", "html"),
-                new XElement("text", 
-                    new XCData("<p dir=\"ltr\" style=\"text-align: left;\">" +
-                        quizfrage.Antwort3+"</p>")),
-                new XElement("feedback",
-                    new XAttribute("format", "html"),
-                    new XElement("text"))),
-            new XElement("answer",
-                new XAttribute("fraction",quizfrage.Fraction4),
-                new XAttribute("format", "html"),
-                new XElement("text",
-                    new XCData("<p dir=\"ltr\" style=\"text-align: left;\">" +
-                        quizfrage.Antwort4+"</p>")),
-                new XElement("feedback",
-                    new XAttribute("format", "html"),
-                    new XElement("text"))),
-            new XElement("answer",
-                new XAttribute("fraction",quizfrage.Fraction5),
-                new XAttribute("format", "html"),
-                new XElement("text", 
-                    new XCData("<p dir = \"ltr\" style=\"text-align: left;\">" +
-                        quizfrage.Antwort5+"</p>")),
-                new XElement("feedback",
-                    new XAttribute("format", "html"),
-                    new XElement("text")))
-                   
+            new XElement("shownumcorrect")
                 );
+
+            for(int i = 0; i < quizfrage.AnzahlAntworten; i++)
+            {
+                element.Add(new XElement("answer",
+                    new XAttribute("fraction", quizfrage.Fractions[i]),
+                    new XAttribute("format", "html"),
+                    new XElement("text",
+                        new XCData("<p dir = \"ltr\" style=\"text-align: left;\">" +
+                            quizfrage.Antworten[i] + "</p>")),
+                    new XElement("feedback",
+                        new XAttribute("format", "html"),
+                        new XElement("text"))));
+            }
+
             doc.Element("quiz").Add(com);
             doc.Element("quiz").Add(element);
             doc.Save(path);
-
-
         }
 
         List<Quizfrage> IModel.suchen(Quizfrage quizfrage)
@@ -130,12 +95,12 @@ namespace MoodleQuizGenerator
 
             //view.anzeigen(erList);
             List<Quizfrage> ergebnis=new List<Quizfrage>();
-            ergebnis.Add(new Quizfrage("", "", "", "", "", "", "", "", "", "", "", ""));
+            ergebnis.Add(new Quizfrage("", "", new List<string>(), new List<string>()));
             return ergebnis;
 
         }
 
-        List<Quizfrage> IModel.suchen(Quizfrage quizfrage, string praefix)
+        List<Quizfrage> IModel.suchen(Quizfrage quizfrage, string praefix, bool anzahlFragenFix)
         {
             throw new NotImplementedException();
         }
@@ -151,17 +116,21 @@ namespace MoodleQuizGenerator
             //else
             //{
                 string nameKategorie = "HabIchMirAusgedacht";
-                doc = new XDocument(new XElement("quiz",
-                    new XComment("question: 0"),
-                    new XElement("question",
-                        new XAttribute ("type","category"),
-                        new XElement("category",
-                            new XElement("text","$course$/top/"+nameKategorie)),
-                        new XElement("info",
-                            new XAttribute("format","moodle_auto_format"),
-                            new XElement("text","Standardkategorie für Fragen, die im Kontext 'Ausdenken' freigegeben sind.")),
-                        new XElement("idnumber"))));
-            //}
+                defineInitialXElement(nameKategorie);
+        }
+
+        public void defineInitialXElement(string nameKategorie)
+        {
+            doc = new XDocument(new XElement("quiz",
+                new XComment("question: 0"),
+                new XElement("question",
+                    new XAttribute("type", "category"),
+                    new XElement("category",
+                        new XElement("text", "$course$/top/" + nameKategorie)),
+                    new XElement("info",
+                        new XAttribute("format", "moodle_auto_format"),
+                        new XElement("text", "Standardkategorie für Fragen, die im Kontext 'Ausdenken' freigegeben sind.")),
+                    new XElement("idnumber"))));
         }
     }
 }

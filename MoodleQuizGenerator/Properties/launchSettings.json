@@ -2,7 +2,7 @@
   "profiles": {
     "MoodleQuizGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "QuizAufgabenBS"
+      "commandLineArgs": "-p QuizAufgaben -f false -y 1 -g 1.00000"
     }
   }
 }
